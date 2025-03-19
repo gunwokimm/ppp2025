@@ -1,0 +1,5 @@
+low = int(input("밑변을 입력하시오"))
+top = int(input("윗변을 입력하시오"))
+height = int(input("높이를 입력하시오"))
+trapezoid_area = ((low + top)*(height)/2)
+print("사디리꼴의 넓이는{}입니다" . format(trapezoid_area))
