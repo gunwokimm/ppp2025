@@ -24,10 +24,8 @@ def load_data():
         print("데이터 로딩 실패!")
         return None, None
 
-# 전역변수로 데이터 저장
 batters_data, pitchers_data = load_data()
 
-# /start 명령어 - 봇이 시작될 때 보여주는 메시지
 async def start_command(update, context):
     message = """
 ⚾안녕하세요 KBO 2025 통계 봇입니다! ⚾
@@ -52,7 +50,6 @@ async def start_command(update, context):
     """
     await update.message.reply_text(message)
 
-# 홈런 TOP 5
 async def homerun_ranking(update, context):
     if batters_data is None:
         await update.message.reply_text("데이터가 없습니다.")
@@ -67,7 +64,6 @@ async def homerun_ranking(update, context):
     
     await update.message.reply_text(message)
 
-# 타율 TOP 5
 async def average_ranking(update, context):
     if batters_data is None:
         await update.message.reply_text("데이터가 없습니다.")
@@ -83,7 +79,6 @@ async def average_ranking(update, context):
     
     await update.message.reply_text(message)
 
-# 타점 TOP 5
 async def rbi_ranking(update, context):
     if batters_data is None:
         await update.message.reply_text("데이터가 없습니다.")
@@ -98,7 +93,6 @@ async def rbi_ranking(update, context):
     
     await update.message.reply_text(message)
 
-# OPS TOP 5
 async def ops_ranking(update, context):
     if batters_data is None:
         await update.message.reply_text("데이터가 없습니다.")
@@ -114,7 +108,6 @@ async def ops_ranking(update, context):
     
     await update.message.reply_text(message)
 
-# 도루 TOP 5
 async def sb_ranking(update, context):
     if batters_data is None:
         await update.message.reply_text("데이터가 없습니다.")
@@ -129,7 +122,7 @@ async def sb_ranking(update, context):
     
     await update.message.reply_text(message)
 
-# 타자 WAR TOP 5
+
 async def war_batter_ranking(update, context):
     if batters_data is None:
         await update.message.reply_text("데이터가 없습니다.")
@@ -144,7 +137,6 @@ async def war_batter_ranking(update, context):
     
     await update.message.reply_text(message)
 
-# 승수 TOP 5
 async def wins_ranking(update, context):
     if pitchers_data is None:
         await update.message.reply_text("데이터가 없습니다.")
@@ -159,7 +151,6 @@ async def wins_ranking(update, context):
     
     await update.message.reply_text(message)
 
-# 평균자책점 TOP 5
 async def era_ranking(update, context):
     if pitchers_data is None:
         await update.message.reply_text("데이터가 없습니다.")
@@ -175,7 +166,6 @@ async def era_ranking(update, context):
     
     await update.message.reply_text(message)
 
-# 세이브 TOP 5
 async def saves_ranking(update, context):
     if pitchers_data is None:
         await update.message.reply_text("데이터가 없습니다.")
@@ -190,7 +180,7 @@ async def saves_ranking(update, context):
     
     await update.message.reply_text(message)
 
-# 탈삼진 TOP 5
+
 async def so_ranking(update, context):
     if pitchers_data is None:
         await update.message.reply_text("데이터가 없습니다.")
@@ -205,7 +195,6 @@ async def so_ranking(update, context):
     
     await update.message.reply_text(message)
 
-# WHIP TOP 5
 async def whip_ranking(update, context):
     if pitchers_data is None:
         await update.message.reply_text("데이터가 없습니다.")
@@ -221,7 +210,6 @@ async def whip_ranking(update, context):
     
     await update.message.reply_text(message)
 
-# 투수 WAR TOP 5
 async def war_pitcher_ranking(update, context):
     if pitchers_data is None:
         await update.message.reply_text("데이터가 없습니다.")
@@ -236,11 +224,10 @@ async def war_pitcher_ranking(update, context):
     
     await update.message.reply_text(message)
 
-# 일반 텍스트 메시지 처리
 async def handle_message(update, context):
     text = update.message.text.lower()
     
-    # 타자 관련
+   
     if "홈런" in text:
         await homerun_ranking(update, context)
     elif "타율" in text:
@@ -251,7 +238,7 @@ async def handle_message(update, context):
         await ops_ranking(update, context)
     elif "도루" in text:
         await sb_ranking(update, context)
-    # 투수 관련
+    
     elif "승" in text and ("수" in text or "왕" in text):
         await wins_ranking(update, context)
     elif "평자" in text or "자책" in text or "era" in text:
@@ -262,21 +249,19 @@ async def handle_message(update, context):
         await so_ranking(update, context)
     elif "whip" in text:
         await whip_ranking(update, context)
-    # WAR 관련
+   
     elif "war" in text:
         await update.message.reply_text("타자 WAR은 /war_b, 투수 WAR은 /war_p를 입력하세요!")
     else:
         await update.message.reply_text("❓ /start를 입력해서 사용법을 확인해보세요!")
 
-# 메인 함수 - 봇 실행
+
 def main():
-    # 봇 토큰 (텔레그램 BotFather에서 받은 토큰)
     TOKEN = "7506465371:AAFyyfnoh40BFIUuocySCi1PpLC0Bgyn5Ew"
     
-    # 봇 애플리케이션 만들기
     app = Application.builder().token(TOKEN).build()
     
-    # 기존 명령어들
+ 
     app.add_handler(CommandHandler("start", start_command))
     app.add_handler(CommandHandler("homerun", homerun_ranking))
     app.add_handler(CommandHandler("average", average_ranking))
@@ -291,7 +276,7 @@ def main():
     app.add_handler(CommandHandler("whip", whip_ranking))
     app.add_handler(CommandHandler("war_p", war_pitcher_ranking))
     
-    # 일반 메시지 처리
+   
     app.add_handler(MessageHandler(filters.TEXT, handle_message))
     
     print("🤖 KBO봇이 작동중입니다!")
